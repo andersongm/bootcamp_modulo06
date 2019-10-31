@@ -66,10 +66,10 @@ export default class Main extends Component {
         Keyboard.dismiss();
     };
 
-    handleNavigate = () => {
+    handleNavigate = user => {
         const { navigation } = this.props;
 
-        navigation.navigate('User');
+        navigation.navigate('User', { user });
     };
 
     render() {
@@ -105,7 +105,9 @@ export default class Main extends Component {
                             <Avatar source={{ uri: item.avatar }} />
                             <Name>{item.name}</Name>
                             <Bio>{item.bio}</Bio>
-                            <ProfileButton onPress={this.handleNavigate}>
+                            <ProfileButton
+                                onPress={() => this.handleNavigate(item)}
+                            >
                                 <ProfileButtonText>
                                     Ver perfil
                                 </ProfileButtonText>

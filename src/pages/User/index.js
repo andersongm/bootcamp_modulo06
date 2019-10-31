@@ -1,8 +1,14 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 // import { Container } from './styles';
 
-export default function User() {
-    return <View />;
+export default function User({ navigation }) {
+    const user = navigation.getParam('user');
+
+    return (
+        <View>
+            <Text>{user.name}</Text>
+        </View>
+    );
 }
