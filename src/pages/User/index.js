@@ -31,7 +31,6 @@ export default class User extends Component {
 
     state = {
         stars: [],
-        nome: 'Teste',
     };
 
     async componentDidMount() {
@@ -40,21 +39,14 @@ export default class User extends Component {
 
         const response = api.get(`/users/${user.login}/starred`);
 
-        const teste = response.data;
-
-        teste.map(t => {
-            console.log(t.name);
-        });
-
         this.setState({
             stars: response.data,
-            nome: 'Juca',
         });
     }
 
     render() {
         const { navigation } = this.props;
-        const { stars, nome } = this.state;
+        const { stars } = this.state;
 
         const user = navigation.getParam('user');
 
@@ -65,8 +57,7 @@ export default class User extends Component {
                     <Name>{user.name}</Name>
                     <Bio>{user.bio}</Bio>
                 </Header>
-                <Text>{nome}</Text>
-                {/* <ScrollView
+                <Stars
                     data={stars}
                     dataSource={stars}
                     keyExtractor={star => String(star.id)}
@@ -81,7 +72,7 @@ export default class User extends Component {
                             </Info>
                         </Starred>
                     )}
-                /> */}
+                />
             </Container>
         );
     }

@@ -35,15 +35,15 @@ export const Bio = styled.Text`
     text-align: center;
 `;
 
-// export const Stars = styled.FlatList.attrs({
-//     showsVerticalScrollIndicator: false,
-// })`
-//     margin-top: 20px;
-//     /* background: #ff99; */
-//     flex: 1;
-//     border: 1px solid #767;
-//     width: 100%;
-// `;
+export const Stars = styled.FlatList.attrs({
+    showsVerticalScrollIndicator: false,
+})`
+    margin-top: 20px;
+    /* background: #ff99; */
+    flex: 1;
+    border: 1px solid #767;
+    width: 100%;
+`;
 
 // export const Stars = styled.ScrollView`
 //     margin-top: 20px;
