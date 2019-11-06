@@ -36,6 +36,14 @@ export const Bio = styled.Text`
     text-align: center;
 `;
 
+export const ButtonReturn = styled.TouchableOpacity`
+    background-color: #7159c1;
+    height: 38px;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+`;
+
 export const Stars = styled.FlatList.attrs({
     showsVerticalScrollIndicator: false,
 })`

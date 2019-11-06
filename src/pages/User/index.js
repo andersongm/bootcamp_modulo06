@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { StyleSheet, View, Text } from 'react-native';
 
 import {
     Container,
@@ -14,9 +15,17 @@ import {
     Title,
     Author,
     Loading,
+    ButtonReturn,
 } from './styles';
 
 import api from '../../services/api';
+
+const styles = StyleSheet.create({
+    btnReturn: {
+        color: '#FFF',
+        fontWeight: 'bold',
+    },
+});
 
 export default class User extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -26,6 +35,7 @@ export default class User extends Component {
     static propTypes = {
         navigation: PropTypes.shape({
             getParam: PropTypes.func,
+            navigate: PropTypes.func,
         }).isRequired,
     };
 
@@ -33,6 +43,7 @@ export default class User extends Component {
         stars: [],
         loading: false,
         page: 1,
+        refreshing: false,
     };
 
     async componentDidMount() {
@@ -44,7 +55,7 @@ export default class User extends Component {
     async loadData(page) {
         const { navigation } = this.props;
         const user = navigation.getParam('user');
-        let actualPage = page;
+        const actualPage = page;
 
         this.setState({
             loading: true,
@@ -56,14 +67,8 @@ export default class User extends Component {
             },
         });
 
-        console.tron.log(response.data);
-
-        if (response.data.length() === 0) {
-            console.tron.log('Teste');
-            actualPage = 1;
-        }
-
         console.tron.log(actualPage);
+        console.tron.log(response);
 
         this.setState({
             stars: response.data,
@@ -82,9 +87,37 @@ export default class User extends Component {
         // });
     };
 
+    refreshList = () => {
+        this.setState({ refreshing: true, stars: [] }, this.load);
+    };
+
+    testReturn = () => {
+        const page = 1;
+        this.loadData(page);
+    };
+
+    listEmpty = () => {
+        return (
+            // View to show when list is empty
+            <View>
+                <ButtonReturn onPress={this.testReturn}>
+                    <Text style={styles.btnReturn}>
+                        No Data Found - Click to Return
+                    </Text>
+                </ButtonReturn>
+            </View>
+        );
+    };
+
+    handleNavigate = repository => {
+        const { navigation } = this.props;
+        console.tron.log('opa');
+        navigation.navigate('Repository', { repository });
+    };
+
     render() {
         const { navigation } = this.props;
-        const { stars, loading } = this.state;
+        const { stars, loading, refreshing } = this.state;
 
         const user = navigation.getParam('user');
 
@@ -101,11 +134,13 @@ export default class User extends Component {
                 ) : (
                     <Stars
                         data={stars}
+                        onRefresh={this.refreshList}
+                        refreshing={refreshing}
                         onEndReachedThreshold={0.2} // Carrega mais itens quando chegar em 20% do fim
                         onEndReached={this.loadMore} // Função que carrega mais itens
                         keyExtractor={star => String(star.id)}
                         renderItem={({ item }) => (
-                            <Starred>
+                            <Starred onPress={() => this.handleNavigate(item)}>
                                 <OwnerAvatar
                                     source={{ uri: item.owner.avatar_url }}
                                 />
@@ -115,6 +150,7 @@ export default class User extends Component {
                                 </Info>
                             </Starred>
                         )}
+                        ListEmptyComponent={this.listEmpty}
                     />
                 )}
             </Container>
