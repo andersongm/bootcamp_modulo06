@@ -52,7 +52,7 @@ export default class User extends Component {
         this.loadData(page);
     }
 
-    async loadData(page) {
+    async loadData(page = 1) {
         const { navigation } = this.props;
         const user = navigation.getParam('user');
         const actualPage = page;
@@ -78,13 +78,11 @@ export default class User extends Component {
     }
 
     loadMore = () => {
-        const { page } = this.state;
+        const { page, stars } = this.state;
 
-        this.loadData(page + 1);
-
-        // this.setState({
-        //     page: page + 1,
-        // });
+        if (stars.length >= 30) {
+            this.loadData(page + 1);
+        }
     };
 
     refreshList = () => {
@@ -136,7 +134,7 @@ export default class User extends Component {
                         data={stars}
                         onRefresh={this.refreshList}
                         refreshing={refreshing}
-                        onEndReachedThreshold={0.2} // Carrega mais itens quando chegar em 20% do fim
+                        onEndReachedThreshold={0.5} // Carrega mais itens quando chegar em 20% do fim
                         onEndReached={this.loadMore} // Função que carrega mais itens
                         keyExtractor={star => String(star.id)}
                         renderItem={({ item }) => (
@@ -150,7 +148,7 @@ export default class User extends Component {
                                 </Info>
                             </Starred>
                         )}
-                        ListEmptyComponent={this.listEmpty}
+                        // ListEmptyComponent={this.listEmpty}
                     />
                 )}
             </Container>
